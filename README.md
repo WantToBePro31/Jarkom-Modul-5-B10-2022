@@ -323,3 +323,62 @@ Node yang berperan sebagai DHCP Relay yaitu Ostania dan Westalis akan menambahka
   
 ## Config Web Server
 Node yang berperan sebagai Web Server yaitu Garden dan SSS akan menambahkan konfigurasi pada file-file sebagai berikut.
+
+- `.bashrc`
+  ```shell
+  echo nameserver 192.168.122.1 > /etc/resolv.conf
+  apt-get update
+  apt-get install apache2 -y
+  ```
+ 
+- `/var/www/html/index.html`
+  ```shell
+  # Garden
+  Garden nih
+  
+  # SSS
+  SSS nih
+  ```
+  
+- `/etc/apache2/ports.conf`
+  ```shell
+  # If you just change the port or add more ports here, you will likely also
+  # have to change the VirtualHost statement in
+  # /etc/apache2/sites-enabled/000-default.conf
+
+  Listen 80
+  Listen 443
+
+  <IfModule ssl_module>
+          Listen 443
+  </IfModule>
+
+  <IfModule mod_gnutls.c>
+          Listen 443
+  </IfModule>
+
+  # vim: syntax=apache ts=4 sw=4 sts=4 sr noet
+  ```
+  
+## Penyelesaian
+### 1
+> Agar topologi yang kalian buat dapat mengakses keluar, kalian diminta untuk mengkonfigurasi Strix menggunakan iptables, tetapi Loid tidak ingin menggunakan MASQUERADE
+
+Pertama kita dapatkan terlebih dahulu IP dari Strix yang berhubungan dengan NAT dengan menggunakan command `ip a`.
+![image](https://user-images.githubusercontent.com/67154280/206515877-957cedba-7027-4911-95ad-ad320cdbe9f6.png)
+
+Karena diminta untuk tidak menggunakan MASQUERADE, maka digunakan SNAT. Source akan diubah dari yang awalnya 0.0 ke Strix dengan --to-source 192.168.122.213.
+```shell
+iptables -t nat -A POSTROUTING -s 10.8.0.0/21 -o eth0 -j SNAT --to-source 192.168.122.213
+```
+
+### 2
+> Kalian diminta untuk melakukan drop semua TCP dan UDP dari luar Topologi kalian pada server yang merupakan DHCP Server demi menjaga keamanan
+### 3
+> Loid meminta kalian untuk membatasi DHCP dan DNS Server hanya boleh menerima maksimal 2 koneksi ICMP secara bersamaan menggunakan iptables, selebihnya didrop
+### 4
+> Akses menuju Web Server hanya diperbolehkan disaat jam kerja yaitu Senin sampai Jumat pada pukul 07.00 - 16.00
+### 5
+> Karena kita memiliki 2 Web Server, Loid ingin Ostania diatur sehingga setiap request dari client yang mengakses Garden dengan port 80 akan didistribusikan secara bergantian pada SSS dan Garden secara berurutan dan request dari client yang mengakses SSS dengan port 443 akan didistribusikan secara bergantian pada Garden dan SSS secara berurutan
+### 6
+> Karena Loid ingin tau paket apa saja yang di-drop, maka di setiap node server dan router ditambahkan logging paket yang di-drop dengan standard syslog level
