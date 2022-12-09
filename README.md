@@ -392,7 +392,7 @@ semua yang berada pada udp dan tcp di drop
 
 ### Testing
 
-![image](https://github.com/zunia25/Modul5/blob/main/testing02.png)
+![image](https://github.com/zunia25/Modul5/blob/main/Testing2.png)
 
 ### 3
 > Loid meminta kalian untuk membatasi DHCP dan DNS Server hanya boleh menerima maksimal 2 koneksi ICMP secara bersamaan menggunakan iptables, selebihnya didrop
