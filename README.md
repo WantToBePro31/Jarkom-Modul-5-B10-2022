@@ -403,8 +403,37 @@ Hasil testing
 ### 4
 > Akses menuju Web Server hanya diperbolehkan disaat jam kerja yaitu Senin sampai Jumat pada pukul 07.00 - 16.00
 
+Karena dibatasi waktu tertentu maka kita batasi menggunakan `-m time` dengan `--timestart` sebagai waktu mulai dapat diakses bernilai `07.00` dan `--timestop` sebagai waktu akhir dapat diakses bernilai `16.00`, serta membatasi hari berlaku dengan `--weekdays` untuk hari Senin hingga Jumat. Terdapat flag `-j` yang menentukan kapan akses akan di `ACCEPT` atau `REJECT`.
+
+Pada Node Eden (DNS Server)
+
+```shell
+iptables -A INPUT -s 10.8.7.136/29 -m time --timestart 07:00 --timestop 16:00 --weekdays Mon,Tue,Wed,Thu,Fri -j ACCEPT
+iptables -A INPUT -s 10.8.7.136/29 -j REJECT
+```
+
+Pada Node Garden dan SSS (Web Server)
+```shell
+iptables -A INPUT -m time --timestart 07:00 --timestop 16:00 --weekdays Mon,Tue,Wed,Thu,Fri -j ACCEPT
+iptables -A INPUT -j REJECT
+```
+
+Hasil Testing
+
+![image](https://user-images.githubusercontent.com/67154280/206680907-240dcee0-0b90-49c9-8a65-e4ad487dc770.png)
+
+![image](https://user-images.githubusercontent.com/67154280/206681237-3496df9f-5b06-46a6-a299-ddc628f81200.png)
+
 ### 5
 > Karena kita memiliki 2 Web Server, Loid ingin Ostania diatur sehingga setiap request dari client yang mengakses Garden dengan port 80 akan didistribusikan secara bergantian pada SSS dan Garden secara berurutan dan request dari client yang mengakses SSS dengan port 443 akan didistribusikan secara bergantian pada Garden dan SSS secara berurutan
+
+
+```shell
+iptables -A PREROUTING -t nat -p tcp --dport 80 -d 10.8.7.138 -m statistic --mode nth --every 2 --packet 0 -j DNAT --to-destination 10.8.7.138:80
+iptables -A PREROUTING -t nat -p tcp --dport 80 -d 10.8.7.138 -j DNAT --to-destination 10.8.7.139:80
+iptables -A PREROUTING -t nat -p tcp --dport 443 -d 10.8.7.139 -m statistic --mode nth --every 2 --packet 0 -j DNAT --to-destination 10.8.7.139:443
+iptables -A PREROUTING -t nat -p tcp --dport 443 -d 10.8.7.139 -j DNAT --to-destination 10.8.7.138:443
+```
 
 ### 6
 > Karena Loid ingin tau paket apa saja yang di-drop, maka di setiap node server dan router ditambahkan logging paket yang di-drop dengan standard syslog level
