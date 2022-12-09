@@ -440,6 +440,7 @@ Hasil Testing
 ### 5
 > Karena kita memiliki 2 Web Server, Loid ingin Ostania diatur sehingga setiap request dari client yang mengakses Garden dengan port 80 akan didistribusikan secara bergantian pada SSS dan Garden secara berurutan dan request dari client yang mengakses SSS dengan port 443 akan didistribusikan secara bergantian pada Garden dan SSS secara berurutan
 
+Karena diminta untuk setiap request akan didistribusikan secara bergantian antara Garden dan SSS, maka akan dikonfigurasi untuk masing-masing node dengan port untuk request masing-masing node adalah 80 dan 443 dengan menggunakan `--dport`. Selain itu, akan dibatasi secara bergantian dengan menggunakan `--every 2` sehingga akan bergantian terdistribusinya dengan mengarahkan ke node lain dengan menggunakan `--to-destination`.
 
 ```shell
 iptables -A PREROUTING -t nat -p tcp --dport 80 -d 10.8.7.138 -m statistic --mode nth --every 2 --packet 0 -j DNAT --to-destination 10.8.7.138:80
@@ -448,19 +449,15 @@ iptables -A PREROUTING -t nat -p tcp --dport 443 -d 10.8.7.139 -m statistic --mo
 iptables -A PREROUTING -t nat -p tcp --dport 443 -d 10.8.7.139 -j DNAT --to-destination 10.8.7.138:443
 ```
 
-Pada SSS dan Garden, diinstall apache
+Hasil Testing
 
-```
-apt-get update
-apt-get install apache2 -y
-```
+- Request ke Garden
 
-Kemudian tambahkan file di /var/www/html/index.html
+![image](https://user-images.githubusercontent.com/67154280/206709697-85f7cc07-89fd-4c80-b7eb-001ea7f9149c.png)
 
-isi memakai nama servernya
+- Request ke SSS
 
-### Testing
-![image](https://github.com/zunia25/Modul5/blob/main/testing05.png)
+![image](https://user-images.githubusercontent.com/67154280/206709720-8a63e0fa-126b-485c-9c71-71391a335a7c.png)
 
 ### 6
 > Karena Loid ingin tau paket apa saja yang di-drop, maka di setiap node server dan router ditambahkan logging paket yang di-drop dengan standard syslog level
