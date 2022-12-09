@@ -381,6 +381,18 @@ Hasil testing
 ### 2
 > Kalian diminta untuk melakukan drop semua TCP dan UDP dari luar Topologi kalian pada server yang merupakan DHCP Server demi menjaga keamanan
 
+Syntax iptables yang dapat digunakan untuk masalah tersebut adalah sebagai berikut. Iptables ditempatkan pada WISE yang merupakan DHCP server.
+
+```
+iptables -A FORWARD -d 10.8.7.128/29 -i eth0 -p tcp -j DROP
+iptables -A FORWARD -d 10.8.7.128/29 -i eth0 -p udp -j DROP
+```
+
+semua yang berada pada udp dan tcp di drop
+
+### Testing
+
+![image]()
 ### 3
 > Loid meminta kalian untuk membatasi DHCP dan DNS Server hanya boleh menerima maksimal 2 koneksi ICMP secara bersamaan menggunakan iptables, selebihnya didrop
 
