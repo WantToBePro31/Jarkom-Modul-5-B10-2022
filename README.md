@@ -392,7 +392,8 @@ semua yang berada pada udp dan tcp di drop
 
 ### Testing
 
-![image]()
+![image](https://github.com/zunia25/Modul5/blob/main/testing02.png)
+
 ### 3
 > Loid meminta kalian untuk membatasi DHCP dan DNS Server hanya boleh menerima maksimal 2 koneksi ICMP secara bersamaan menggunakan iptables, selebihnya didrop
 
@@ -447,5 +448,56 @@ iptables -A PREROUTING -t nat -p tcp --dport 443 -d 10.8.7.139 -m statistic --mo
 iptables -A PREROUTING -t nat -p tcp --dport 443 -d 10.8.7.139 -j DNAT --to-destination 10.8.7.138:443
 ```
 
+Pada SSS dan Garden, diinstall apache
+
+```
+apt-get update
+apt-get install apache2 -y
+```
+
+Kemudian tambahkan file di /var/www/html/index.html
+
+isi memakai nama servernya
+
+### Testing
+![image](https://github.com/zunia25/Modul5/blob/main/testing05.png)
+
 ### 6
 > Karena Loid ingin tau paket apa saja yang di-drop, maka di setiap node server dan router ditambahkan logging paket yang di-drop dengan standard syslog level
+
+**Pada Wise** restart terlebih dahulu DHCP nya dengan:
+```
+service isc-dhcp-server restart
+service isc-dhcp-server restart
+```
+
+kemudian isikan sylog syntax pada wise untuk melihat paket yang di drop .
+
+```
+iptables -N LOGGING
+iptables -A INPUT -p icmp -m connlimit --connlimit-above 2 --connlimit-mask 0 -j LOGGING
+iptables -A LOGGING -j LOG --log-prefix "IPTables-Dropped: "
+iptables -A LOGGING -j DROP
+```
+
+kemudian isikan sylog pada semua node
+
+```
+service apache2 restart
+service apache2 restart
+
+iptables -A INPUT -m time --timestart 07:00 --timestop 16:00 --weekdays Mon,Tue,Wed,Thu,Fri -j ACCEPT
+
+iptables -N LOGGING
+iptables -A INPUT -j LOGGING
+iptables -A LOGGING -j LOG --log-prefix "IPTables-Rejected: "
+iptables -A LOGGING -j REJECT
+
+service rsyslog restart
+```
+
+Setelah selesai semua testing hasilnya
+
+### Testing 
+
+![image](https://github.com/zunia25/Modul5/blob/main/testing06.png)
