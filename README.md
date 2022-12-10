@@ -384,15 +384,17 @@ Hasil testing
 Syntax iptables yang dapat digunakan untuk masalah tersebut adalah sebagai berikut. Iptables ditempatkan pada WISE yang merupakan DHCP server.
 
 ```
-iptables -A FORWARD -d 10.8.7.128/29 -i eth0 -p tcp -j DROP
-iptables -A FORWARD -d 10.8.7.128/29 -i eth0 -p udp -j DROP
+iptables -A INPUT ! -s 10.8.0.0/21 -p tcp -j DROP
+iptables -A INPUT ! -s 10.8.0.0/21 -p udp -j DROP
 ```
 
-semua yang berada pada udp dan tcp di drop
+Ketika terdapat node yang mengakses dari luar topologi, semua yang mengakses secara tcp atau udp akan didrop. Disini akan digunakan node baru untuk testing dengan IP `10.9.0.2` yang akan mengakses WISE dengan IP `10.9.0.1`.
 
 Hasil Testing
 
-![image](https://user-images.githubusercontent.com/67154280/206834081-d1fb23ca-3e8a-472b-a14b-b823642885e4.png)
+![image](https://user-images.githubusercontent.com/67154280/206849667-40f5e848-18ec-4234-82c7-f4b9309e6b32.png)
+
+![image](https://user-images.githubusercontent.com/67154280/206849677-0eb5e24f-7835-4b9f-b528-09843744e2d9.png)
 
 ### 3
 > Loid meminta kalian untuk membatasi DHCP dan DNS Server hanya boleh menerima maksimal 2 koneksi ICMP secara bersamaan menggunakan iptables, selebihnya didrop
