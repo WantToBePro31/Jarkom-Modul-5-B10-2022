@@ -502,3 +502,6 @@ Hasil Testing
 ![image](https://github.com/zunia25/Modul5/blob/main/testing06.png)
 
 ![image](https://user-images.githubusercontent.com/67154280/206851511-8a465da3-03fe-4d95-91e6-12ecb030bf43.png)
+
+## Kendala
+- Saat melakukan tes untuk nomor 2 dan nomor 6, soal masih rancu
