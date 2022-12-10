@@ -390,9 +390,9 @@ iptables -A FORWARD -d 10.8.7.128/29 -i eth0 -p udp -j DROP
 
 semua yang berada pada udp dan tcp di drop
 
-### Testing
+Hasil Testing
 
-![image](https://github.com/zunia25/Modul5/blob/main/Testing2.png)
+![image](https://user-images.githubusercontent.com/67154280/206834081-d1fb23ca-3e8a-472b-a14b-b823642885e4.png)
 
 ### 3
 > Loid meminta kalian untuk membatasi DHCP dan DNS Server hanya boleh menerima maksimal 2 koneksi ICMP secara bersamaan menggunakan iptables, selebihnya didrop
@@ -495,6 +495,6 @@ service rsyslog restart
 
 Setelah selesai semua testing hasilnya
 
-### Testing 
+Hasil Testing 
 
 ![image](https://github.com/zunia25/Modul5/blob/main/testing06.png)
