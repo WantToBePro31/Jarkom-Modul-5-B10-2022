@@ -388,13 +388,13 @@ iptables -A INPUT ! -s 10.8.0.0/21 -p tcp -j DROP
 iptables -A INPUT ! -s 10.8.0.0/21 -p udp -j DROP
 ```
 
-Ketika terdapat node yang mengakses dari luar topologi, semua yang mengakses secara tcp atau udp akan didrop. Disini akan digunakan node baru untuk testing dengan IP `10.9.0.2` yang akan mengakses WISE dengan IP `10.9.0.1`.
+Ketika terdapat node yang mengakses dari luar topologi, semua yang mengakses secara tcp atau udp akan didrop. Disini akan digunakan node baru untuk testing dengan IP `10.9.0.2` yang akan mengakses WISE dengan IP `10.8.7.131`.
 
 Hasil Testing
 
 ![image](https://user-images.githubusercontent.com/67154280/206849667-40f5e848-18ec-4234-82c7-f4b9309e6b32.png)
 
-![image](https://user-images.githubusercontent.com/67154280/206849677-0eb5e24f-7835-4b9f-b528-09843744e2d9.png)
+![image](https://user-images.githubusercontent.com/67154280/206850993-5a157a0b-dd7a-472f-a635-04f0f99a5076.png)
 
 ### 3
 > Loid meminta kalian untuk membatasi DHCP dan DNS Server hanya boleh menerima maksimal 2 koneksi ICMP secara bersamaan menggunakan iptables, selebihnya didrop
