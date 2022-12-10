@@ -368,7 +368,7 @@ Pertama kita dapatkan terlebih dahulu IP dari Strix yang berhubungan dengan NAT 
 
 ![image](https://user-images.githubusercontent.com/67154280/206515877-957cedba-7027-4911-95ad-ad320cdbe9f6.png)
 
-Karena diminta untuk tidak menggunakan MASQUERADE, maka digunakan SNAT. Source akan diubah dari yang awalnya 0.0 ke Strix dengan --to-source 192.168.122.213.
+Karena diminta untuk tidak menggunaka `MASQUERADE`, maka digunakan `SNAT`. Source akan diubah dari yang awalnya `0.0` ke Strix dengan `--to-source 192.168.122.213`.
 
 ```shell
 iptables -t nat -A POSTROUTING -s 10.8.0.0/21 -o eth0 -j SNAT --to-source 192.168.122.213
@@ -397,7 +397,7 @@ Hasil Testing
 ### 3
 > Loid meminta kalian untuk membatasi DHCP dan DNS Server hanya boleh menerima maksimal 2 koneksi ICMP secara bersamaan menggunakan iptables, selebihnya didrop
 
-Karena koneksinya ICMP maka akan digunakan flag `-p` dengan nilai `icmp`. Selain, itu akan digunakan limit maksimal 2 untuk akses koneksi secara bersamaan sehingga dapat menggunakan `--connlimit-above 3` dan menambahkan target `DROP` agar koneksi lainnya selain 2 koneksi tersebut ditolak.
+Karena koneksinya ICMP maka akan digunakan flag `-p` dengan nilai `icmp`. Selain, itu akan digunakan limit maksimal 2 untuk akses koneksi secara bersamaan sehingga dapat menggunakan `--connlimit-above 2` dan menambahkan target `DROP` agar koneksi lainnya selain 2 koneksi tersebut ditolak.
 
 ```shell
 iptables -A INPUT -p icmp -m connlimit --connlimit-above 2 --connlimit-mask 0 -j DROP
